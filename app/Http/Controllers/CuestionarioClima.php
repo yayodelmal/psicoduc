@@ -55,6 +55,8 @@ class CuestionarioClima extends Controller
             }
 
             $userData["email_user"] = $funcionario[0]->email;
+            $userData["nombre_user"] = $funcionario[0]->firstname;
+            $userData["apellidos_user"] = $funcionario[0]->lastname;
 
             $intervencion = $this->obtenerUnidadesFuncionario($funcionario[0]->id);
             $userData["curso_user"] = $intervencion[0]->id;
