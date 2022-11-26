@@ -21,8 +21,11 @@
 
        
             {{-- preguntar genero y edad --}}
-        <div class="col-sm-3">
-            <form method="GET" action="{{ route('traerRespuestas') }}" accept-charset="UTF-8" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('guardarCuestionarioClima') }}" accept-charset="UTF-8" enctype="multipart/form-data">
+        @csrf
+            <div class="col-sm-3">
+        
+        
             <table class="table table-bordered">
                 <tr>
                     <th rowspan="3">Género</th>
@@ -44,7 +47,7 @@
                 <table class="table table-bordered">
                     <tr>
                         <th>Edad</th>
-                        <td><input class="col-sm-12" id="edad" type="number" min="1" max="100"></td>
+                        <td><input class="col-sm-12" id="edad" name="edad" type="number" min="1" max="100"></td>
                     </tr>
                 </table>
             </div>
@@ -66,13 +69,12 @@
             <div id="desarrollo-tbody"></div>
                  <div class="text-center">
 
-                    {{-- validar que todo venga lleno --}}
-                    <button type="button" class="btn btn-primary" onclick="guardarRespuestasClima();">Finalizar</button>
-                    <div class="col-6 text-center">
-                        <button type="submit" class="btn btn-success" id="btnEnviar">Finalizar</button>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-success" id="btnEnviar">Finalizar cuestionario</button>
                     </div>
+                    
                 </div>
-            </form>
+        </form>
         </div>
     </div>
 </div>

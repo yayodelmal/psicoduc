@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\CClima;
 use Illuminate\Support\Facades\DB;
+use App\Models\Matricular;
 
 
 class CuestionarioClima extends Controller
@@ -26,7 +27,58 @@ class CuestionarioClima extends Controller
 
     public function index()
     {
-        return view('instrumentos.cuestionario-clima');
+        return view('pasarela.autenticacion');
+    }
+
+    public function pasarelaMoodle(){
+        return view('pasarela.autenticacion');
+    }
+
+    public function verificarFuncionarioMoodle(Request $request){
+        
+        $post = $request->all();
+        $userData = array();
+
+        $funcionarioData = Matricular::where('email',$post["email"] )->first();
+
+        if($funcionarioData == null){
+            $userData["status"] = false;
+            return redirect(route('pasarelaMoodle'))->with('statuserror', 'Correo o contraseña inválido.');
+        }
+        
+        if($post["password"] == $funcionarioData->contrasenia){
+            $funcionario = $this->obtenerFuncionario($post["email"]);
+            
+            if(count($funcionario) == 0){
+                $userData["status"] = false;
+                return redirect(route('pasarelaMoodle'))->with('statuserror', 'El usuario no se encuentra ingresado a Moodle.');
+            }
+
+            $userData["email_user"] = $funcionario[0]->email;
+
+            $intervencion = $this->obtenerUnidadesFuncionario($funcionario[0]->id);
+            $userData["curso_user"] = $intervencion[0]->id;
+            $userData["status"] = true;
+
+            //return response()->json($userData);
+
+            //La pregunta de fuego es si ya ha respondido el cuestionario.
+
+            $Cuestionario = CClima::where('email',$post["email"] )
+            ->where('id_curso',$userData["curso_user"])
+            ->first();
+
+            if($Cuestionario == null){
+                return view('instrumentos.cuestionario-clima',['userData' => $userData]);
+            }else{
+                return redirect(route('pasarelaMoodle'))->with('statuserror', 'Usted ya ha contestado el Cuestionario de Clima del área '.$intervencion[0]->fullname);
+            }
+            
+        }else{
+            $userData["status"] = false;
+            return redirect(route('pasarelaMoodle'))->with('statuserror', 'Correo o contraseña inválido.');
+        }
+            
     }
 
     public function definirResultadoTabla($media){
@@ -614,8 +666,12 @@ class CuestionarioClima extends Controller
         
         //Si no hay registro de que el funcionario no haya contestado y el Email y el curso son correctos, procedo a guardar.
         //preguntar si "Clima" tiene el "correo" y "curso" del usuario  if (isset($cuestionarioClima->email && $cuestionarioClima->curso_id))
-        
+        dd($post);
         $cuestionarioClima = new CClima();
+
+        $cuestionarioClima->email = "PruebaDeControlador@gmail.com";
+        $cuestionarioClima->id_curso = "1";
+
         $cuestionarioClima->genero = $post["genero"] ?? null;
         $cuestionarioClima->edad = $post["edad"] ?? null;
         $cuestionarioClima->p01 = $post["p01"] ?? null;

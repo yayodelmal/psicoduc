@@ -563,15 +563,15 @@ function guardarRespuestasClima() {
         method: 'POST',
         url: webservice + '/guardar/cuestionario/clima',
         headers: {
-            
+            _token: $('input[name="_token"]').val()
         },
         crossDomain: true,
         dataType: 'text',
         data: {
-            //_token: $('meta[name="csrf-token"]').attr('content'),
+            
             //Enviar 
             //Email, id_curso
-
+           
             //Preguntas de sexo y edad.
             genero: $("input[name='genero']:checked").val(),
             edad: $("#edad").val(),

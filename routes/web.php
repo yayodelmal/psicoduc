@@ -28,6 +28,10 @@ Route::get('/registrar/funcionario/{id}', [App\Http\Controllers\MatriculaControl
 Route::get('/crear/funcionario', [App\Http\Controllers\MatriculaController::class, 'crear_funcionario'])->name('crearFuncionario');
 Route::post('/guardar/funcionario/', [App\Http\Controllers\MatriculaController::class, 'guardar_funcionario'])->name('guardarNuevoFuncionario');
 
+//Pasarela
+Route::get('autenticacion/moodle', [App\Http\Controllers\CuestionarioClima::class, 'pasarelaMoodle'])->name('pasarelaMoodle');
+Route::post('autenticacion/moodle/funcionario', [App\Http\Controllers\CuestionarioClima::class, 'verificarFuncionarioMoodle'])->name('verificarFuncionarioMoodle');
+
 //Instrumento - Cuestionario de Clima
 Route::get('/cuestionario-de-clima', [App\Http\Controllers\CuestionarioClima::class, 'index'])->name('cuestionarioClima');
 Route::post('/guardar/cuestionario/clima', [App\Http\Controllers\CuestionarioClima::class, 'guardarCuestionarioClima'])->name('guardarCuestionarioClima');
