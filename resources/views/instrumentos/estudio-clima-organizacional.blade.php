@@ -13,7 +13,7 @@
     switch($resultado){
       
       case 'Muy favorable':
-        $color = "37e318";
+        $color = "#1cc88a";
         return $color;
       break;
 
@@ -33,7 +33,7 @@
       break;
 
       case 'Muy desfavorable':
-        $color = "#FF5733";
+        $color = "#e74a3b";
         return $color;
       break;
 

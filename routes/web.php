@@ -30,7 +30,7 @@ Route::post('/guardar/funcionario/', [App\Http\Controllers\MatriculaController::
 
 //Pasarela
 Route::get('autenticacion/moodle', [App\Http\Controllers\CuestionarioClima::class, 'pasarelaMoodle'])->name('pasarelaMoodle');
-Route::post('autenticacion/moodle/funcionario', [App\Http\Controllers\CuestionarioClima::class, 'verificarFuncionarioMoodle'])->name('verificarFuncionarioMoodle');
+Route::post('cuestionario/clima', [App\Http\Controllers\CuestionarioClima::class, 'verificarFuncionarioMoodle'])->name('verificarFuncionarioMoodle');
 
 //Instrumento - Cuestionario de Clima
 Route::get('/cuestionario-de-clima', [App\Http\Controllers\CuestionarioClima::class, 'index'])->name('cuestionarioClima');

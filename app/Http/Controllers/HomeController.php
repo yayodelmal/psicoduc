@@ -24,6 +24,6 @@ class HomeController extends Controller
     public function index()
     {
         //dd($this->obtenerUnidades());
-        return view('home');
+        return view('welcome');
     }
 }

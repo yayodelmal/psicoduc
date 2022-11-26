@@ -362,7 +362,7 @@ function printClimaDesarrollo(){
         //Pega de html de como quiero ver las preguntas de desarrollo
         '<div class="mb-3">'+
             '<label for="'+ desarrollo.data[i].id +'" class="form-label">'+ desarrollo.data[i].texto +'</label>'+
-            '<textarea class="form-control" id="pd_'+ desarrollo.data[i].id +'" rows="3"></textarea>'+
+            '<textarea class="form-control" id="pd_'+ desarrollo.data[i].id +'" name="pd_'+ desarrollo.data[i].id +'" rows="3"></textarea>'+
         '</div>';
     }
     
