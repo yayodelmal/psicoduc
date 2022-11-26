@@ -125,7 +125,7 @@
                     </button>
 
                     <!-- Topbar Navbar -->
-                    <ul class="navbar-nav ml-auto">
+                    {{-- <ul class="navbar-nav ml-auto">
 
 
                         <div class="topbar-divider d-none d-sm-block"></div>
@@ -146,7 +146,7 @@
                             </div>
                         </li>
 
-                    </ul>
+                    </ul> --}}
 
                 </nav>
                 <!-- End of Topbar -->
