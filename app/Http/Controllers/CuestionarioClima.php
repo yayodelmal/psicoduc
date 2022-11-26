@@ -34,6 +34,26 @@ class CuestionarioClima extends Controller
         return view('pasarela.autenticacion');
     }
 
+    public function datosDashboardClima(){
+
+        $dashboardClimaData = array();
+
+        $listadeunidades = $this->obtenerUnidades();
+        
+        foreach($listadeunidades as $item){
+            
+            $dashboardClimaData["unidad"] = $item["fullname"];
+
+            $listaFuncionarios = Matricular::where('curso_id', $item["id"])->count();
+            $aplicacionClima = CClima::where('id_curso', $item["id"])->count();
+            
+            $promedio = (($aplicacionClima * 100)/$listaFuncionarios);
+            $dashboardClimaData["promedio"] = $promedio;
+        }
+
+        return view('welcome',['dashboardClimaData' => $dashboardClimaData]);
+    }
+
     public function verificarFuncionarioMoodle(Request $request){
         
         $post = $request->all();

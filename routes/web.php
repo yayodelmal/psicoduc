@@ -20,7 +20,8 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [App\Http\Controllers\CuestionarioClima::class, 'datosDashboardClima'])->name('home');
 
 //Manejo de funcionarios
 Route::get('/listaFuncionarios', [App\Http\Controllers\MatriculaController::class, 'index'])->name('listaFuncionarios');
