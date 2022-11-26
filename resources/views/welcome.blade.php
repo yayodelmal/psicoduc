@@ -1,6 +1,41 @@
 @extends('layouts.app')
 @section('content')
 
+<?php
+
+function colorPromedio($promedio){
+
+    switch ($promedio) {
+
+        case ($promedio <= 20):
+            $color = "progress-bar bg-danger";
+            return $color;
+        break;
+
+        case ($promedio > 20 && $promedio <= 40 ):
+            $color = "progress-bar bg-warning";
+            return $color;
+        break;
+
+        case ($promedio > 40 && $promedio <= 60 ):
+            $color = "progress-bar";
+            return $color;
+        break;
+
+        case ($promedio > 60 && $promedio <= 80 ):
+            $color = "progress-bar bg-info";
+            return $color;
+        break;
+        
+        case ($promedio > 80 && $promedio <= 100 ):
+            $color = "progress-bar bg-success";
+            return $color;
+        break;
+
+    }
+}
+
+?>
 <div id="content">
     <div class="container-fluid">
 
@@ -21,38 +56,18 @@
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">Intervenciones</h6>
                     </div>
-                    <div class="card-body">
-                        <h4 class="small font-weight-bold">Urología - Cuestionario de Clima - Intervención noviembre 2022<span
-                                class="float-right">20%</span></h4>
-                        <div class="progress mb-4">
-                            <div class="progress-bar bg-danger" role="progressbar" style="width: 20%"
-                                aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+
+                        <div class="card-body" id="avanceIntervencion">
+                            
+                            @foreach($dashboardClimaData as $data)
+                                <h4 class="small font-weight-bold">{{$data["unidad"]}}- Cuestionario de Clima - Intervención noviembre 2022<span
+                                    class="float-right">{{$data["promedio"]}}%</span></h4>
+                                <div class="progress mb-4">
+                                    <div class="{{ colorPromedio($data["promedio"]) }}" role="progressbar" style="width: {{ $data["promedio"] }}%"
+                                        aria-valuenow="{{ $data["promedio"] }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            @endforeach
                         </div>
-                        <h4 class="small font-weight-bold">Unidad - Nombre instrumento - Intervención periodo<span
-                                class="float-right">40%</span></h4>
-                        <div class="progress mb-4">
-                            <div class="progress-bar bg-warning" role="progressbar" style="width: 40%"
-                                aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                        <h4 class="small font-weight-bold">Unidad - Nombre instrumento - Intervención periodo<span
-                                class="float-right">60%</span></h4>
-                        <div class="progress mb-4">
-                            <div class="progress-bar" role="progressbar" style="width: 60%"
-                                aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                        <h4 class="small font-weight-bold">Unidad - Nombre instrumento - Intervención periodo<span
-                                class="float-right">80%</span></h4>
-                        <div class="progress mb-4">
-                            <div class="progress-bar bg-info" role="progressbar" style="width: 80%"
-                                aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                        <h4 class="small font-weight-bold">Unidad - Nombre instrumento - Intervención periodo<span
-                                class="float-right">Finalizada!</span></h4>
-                        <div class="progress">
-                            <div class="progress-bar bg-success" role="progressbar" style="width: 100%"
-                                aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                    </div>
                 </div>
         </div>
     </div>

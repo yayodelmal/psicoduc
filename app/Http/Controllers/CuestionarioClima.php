@@ -39,18 +39,31 @@ class CuestionarioClima extends Controller
         $dashboardClimaData = array();
 
         $listadeunidades = $this->obtenerUnidades();
+        $contador = 0;
+
+        
         
         foreach($listadeunidades as $item){
             
-            $dashboardClimaData["unidad"] = $item["fullname"];
+            $dashboardClimaData[$contador]["unidad"] = $item["fullname"];
 
             $listaFuncionarios = Matricular::where('curso_id', $item["id"])->count();
             $aplicacionClima = CClima::where('id_curso', $item["id"])->count();
-            
-            $promedio = (($aplicacionClima * 100)/$listaFuncionarios);
-            $dashboardClimaData["promedio"] = $promedio;
-        }
 
+            if($aplicacionClima == 0 && $listaFuncionarios == 0){
+                $dashboardClimaData[$contador]["promedio"] = 0;
+                $contador = $contador + 1;
+            }else{
+                $promedio = (($aplicacionClima * 100)/$listaFuncionarios);
+                $dashboardClimaData[$contador]["promedio"] = $promedio;
+
+                $contador = $contador + 1;
+            }
+            
+        }
+        
+        
+        
         return view('welcome',['dashboardClimaData' => $dashboardClimaData]);
     }
 
