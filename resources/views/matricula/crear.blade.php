@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
-@section('css')
-@endsection
+
 
 @section('content')
     <div class="container">
@@ -151,8 +150,4 @@
             </div>
         </div>
     </div>
-@endsection
-
-
-@section('script')
 @endsection

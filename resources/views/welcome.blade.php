@@ -1,4 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    <h1>hello world</h1>
+<a href="{{ route('listaFuncionarios') }}" >Manejo de Funcionarios</a>
+<a href="{{ route('cuestionarioClima') }}" >Cuestionario de clima</a>
+<a href="{{ route('vistaEstudio') }}" >Estudio de clima organizacional</a>
 @endsection

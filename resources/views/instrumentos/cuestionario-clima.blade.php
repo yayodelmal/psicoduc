@@ -8,8 +8,8 @@
 <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
 <script src="{{ asset('js/cuestionarioclima.js') }}"></script>
 
-<div class="">
-    <div class="_max-width container-fluid _container-form">
+
+    
         <div class="card _card-rounded">
 
             {{-- Encabezado del cuestionario --}}
@@ -76,8 +76,8 @@
                 </div>
         </form>
         </div>
-    </div>
-</div>
+    
+
 
 
 @endsection

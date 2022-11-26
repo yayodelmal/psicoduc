@@ -1,15 +1,46 @@
 @extends('layouts.app')
 
-@section('css')
-@endsection
-
 @section('content')
 
 <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
 <script src="{{ asset('js/estudioclima.js') }}"></script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
+<?php
 
+  function pintarEstados($resultado){
+    
+    switch($resultado){
+      
+      case 'Muy favorable':
+        $color = "37e318";
+        return $color;
+      break;
+
+      case 'Favorable':
+        $color = "#96ee8a"; //original
+        return $color;
+      break;
+
+      case 'Regular':
+        $color = "#fff000";
+        return $color;
+      break;
+
+      case 'Desfavorable':
+        $color = "#FFC300";
+        return $color;
+      break;
+
+      case 'Muy desfavorable':
+        $color = "#FF5733";
+        return $color;
+      break;
+
+    }
+  }
+
+?>
     
     <div class="container">
         <div class="row justify-content-center">
@@ -28,15 +59,15 @@
                             </div>
                         @endif
 
-                        <h2>Resultados Globales</h2>
+                        <h4>Resultados Globales</h4>
                                     
                         <table class="table table-bordered">
                             <thead>
                               <tr>
                                 <th scope="col"></th>
-                                <th scope="col">Media</th>
-                                <th scope="col">Desviación estandar</th>
-                                <th scope="col">Resultado</th>
+                                <th scope="col" width="200">Media</th>
+                                <th scope="col" width="200">Desviación estandar</th>
+                                <th scope="col" width="140">Resultado</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -44,61 +75,61 @@
                                 <th scope="row">Estructura</th>
                                 <td>{{ $EstudioClima->estructura_media }}</td>
                                 <td>{{ $EstudioClima->estructura_desviacion }}</td>
-                                <td>{{ $EstudioClima->estructura_resultado }}</td>
+                                <td bgcolor="{{ pintarEstados($EstudioClima->estructura_resultado) }}">{{ $EstudioClima->estructura_resultado }}</td>
                               </tr>
                               <tr>
                                 <th scope="row">Responsabilidad</th>
                                 <td>{{ $EstudioClima->responsabilidad_media }}</td>
                                 <td>{{ $EstudioClima->responsabilidad_desviacion }}</td>
-                                <td>{{ $EstudioClima->responsabilidad_resultado }}</td>
+                                <td bgcolor="{{ pintarEstados($EstudioClima->responsabilidad_resultado) }}">{{ $EstudioClima->responsabilidad_resultado }}</td>
                               </tr>
                               <tr>
                                 <th scope="row">Recompensa</th>
                                 <td>{{ $EstudioClima->recompensa_media }}</td>
                                 <td>{{ $EstudioClima->recompensa_desviacion }}</td>
-                                <td>{{ $EstudioClima->recompensa_resultado }}</td>
+                                <td bgcolor="{{ pintarEstados($EstudioClima->recompensa_resultado) }}">{{ $EstudioClima->recompensa_resultado }}</td>
                               </tr>
                               <tr>
                                 <th scope="row">Desafio</th>
                                 <td>{{ $EstudioClima->desafio_media }}</td>
                                 <td>{{ $EstudioClima->desafio_desviacion }}</td>
-                                <td>{{ $EstudioClima->desafio_resultado }}</td>
+                                <td bgcolor="{{ pintarEstados($EstudioClima->desafio_resultado) }}">{{ $EstudioClima->desafio_resultado }}</td>
                               </tr>
                               <tr>
                                 <th scope="row">Relaciones</th>
                                 <td>{{ $EstudioClima->relaciones_media }}</td>
                                 <td>{{ $EstudioClima->relaciones_desviacion }}</td>
-                                <td>{{ $EstudioClima->relaciones_resultado }}</td>
+                                <td bgcolor="{{ pintarEstados($EstudioClima->relaciones_resultado) }}">{{ $EstudioClima->relaciones_resultado }}</td>
                               </tr>
                               <tr>
                                 <th scope="row">Cooperación</th>
                                 <td>{{ $EstudioClima->cooperacion_media }}</td>
                                 <td>{{ $EstudioClima->cooperacion_desviacion }}</td>
-                                <td>{{ $EstudioClima->cooperacion_resultado }}</td>
+                                <td bgcolor="{{ pintarEstados($EstudioClima->cooperacion_resultado) }}">{{ $EstudioClima->cooperacion_resultado }}</td>
                               </tr>
                               <tr>
                                 <th scope="row">Estandares</th>
                                 <td>{{ $EstudioClima->estandares_media }}</td>
                                 <td>{{ $EstudioClima->estandares_desviacion }}</td>
-                                <td>{{ $EstudioClima->estandares_resultado }}</td>
+                                <td bgcolor="{{ pintarEstados($EstudioClima->estandares_resultado) }}">{{ $EstudioClima->estandares_resultado }}</td>
                               </tr>
                               <tr>
                                 <th scope="row">Conflicto</th>
                                 <td>{{ $EstudioClima->conflicto_media }}</td>
                                 <td>{{ $EstudioClima->conflicto_desviacion }}</td>
-                                <td>{{ $EstudioClima->conflicto_resultado }}</td>
+                                <td bgcolor="{{ pintarEstados($EstudioClima->conflicto_resultado) }}">{{ $EstudioClima->conflicto_resultado }}</td>
                               </tr>
                               <tr>
                                 <th scope="row">Identidad</th>
                                 <td>{{ $EstudioClima->identidad_media }}</td>
                                 <td>{{ $EstudioClima->identidad_desviacion }}</td>
-                                <td>{{ $EstudioClima->identidad_resultado }}</td>
+                                <td bgcolor="{{ pintarEstados($EstudioClima->identidad_resultado) }}">{{ $EstudioClima->identidad_resultado }}</td>
                               </tr>
                               <tr>
                                 <th scope="row">Total</th>
                                 <td>{{ $EstudioClima->totales_media }}</td>
                                 <td>{{ $EstudioClima->totales_desviacion }}</td>
-                                <td>{{ $EstudioClima->totales_resultado }}</td>
+                                <td bgcolor="{{ pintarEstados($EstudioClima->totales_resultado) }}">{{ $EstudioClima->totales_resultado }}</td>
                               </tr>
                             </tbody>
                         </table>
@@ -112,7 +143,6 @@
                                 <li>Puntaje <b>3.50 a 4.00, <i>muy desfavorable:</i></b> los sujetos tienen una percepción muy desfavorable de la institución en la dimensión evaluada.</li>
                             </ul>
                         </div>
-
 
                         <script type="text/javascript">
                             function drawChart() {
@@ -144,16 +174,14 @@
                             }       
                         </script>
 
-                        
                         <div id="chart_general"></div>
-                        
-                        <h2>Resultados de Liderazgo</h2>
 
-                        {{-- @foreach($EstudioClima->liderazgo_data as $item => $id)
-                       
-                            {{ "['".($item+1)."',".$id."]," }}
+                        <hr class="sidebar-divider">
                         
-                        @endforeach --}}
+                        <br/>
+                        <br/>
+
+                        <h4>Resultados de Liderazgo</h4>
 
                         <script type="text/javascript">
 
@@ -214,15 +242,10 @@
                         </div>
                     
 
-
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-
-
 
 @endsection
