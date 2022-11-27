@@ -1,11 +1,10 @@
 $(document).ready(function () {
-    //Traer preguntas de selección.
+    
     printClimaTable();
-    //Traer preguntas de desarrollo.
     printClimaDesarrollo();
 
 });
-var webservice = "http://localhost:8081";
+
 //Preguntas
 function printClimaTable() {
     const clima = {
@@ -305,27 +304,34 @@ function printClimaTable() {
 
             +
             '<td class="align-middle"><div class="">' +
-            '<input class="form-check-input" type="radio" id="p' + cambiarPuntoPorGuionBajo(id_pregunta) + '" name="p' + cambiarPuntoPorGuionBajo(id_pregunta) + '" value="'+ escalaInversa(inverso, 1) +'">' +
-            '<div class=""><label></label></div>' +
-            '</div></td>'
-
-            +
-            '<td class="align-middle"><div class="">' +
-            '<input class="form-check-input" type="radio" id="p' + cambiarPuntoPorGuionBajo(id_pregunta) + '" name="p' + cambiarPuntoPorGuionBajo(id_pregunta) + '" value="'+ escalaInversa(inverso, 2) +'">' +
-            '<div class=""><label></label></div>' +
-            '</div></td>'
-
-            +
-            '<td class="align-middle"><div class="">' +
-            '<input class="form-check-input" type="radio" id="p' + cambiarPuntoPorGuionBajo(id_pregunta) + '" name="p' + cambiarPuntoPorGuionBajo(id_pregunta) + '" value="'+ escalaInversa(inverso, 3) +'">' +
-            '<div class=""><label></label></div>' +
-            '</div></td>'
-
-            +
-            '<td class="align-middle"><div class="">' +
-            '<input class="form-check-input" type="radio" id="p' + cambiarPuntoPorGuionBajo(id_pregunta) + '" name="p' + cambiarPuntoPorGuionBajo(id_pregunta) + '" value="'+ escalaInversa(inverso, 4) +'">' +
+            '<input class="form-check-input" type="radio" id="p' + cambiarPuntoPorGuionBajo(id_pregunta) + '" name="p' + cambiarPuntoPorGuionBajo(id_pregunta) + '" value="'+ escalaInversa(inverso, 1) +'" required>' +
             '<div class=""><label></label></div>' +
             '</div></td>' +
+            '<div class="valid-feedback">Correcto</div> ' +
+            '<div class="invalid-feedback"> Por favor, responsa la pregunta</div> '
+            +
+            '<td class="align-middle"><div class="">' +
+            '<input class="form-check-input" type="radio" id="p' + cambiarPuntoPorGuionBajo(id_pregunta) + '" name="p' + cambiarPuntoPorGuionBajo(id_pregunta) + '" value="'+ escalaInversa(inverso, 2) +'" required>' +
+            '<div class=""><label></label></div>' +
+            '</div></td>' +
+            '<div class="valid-feedback">Correcto</div> ' +
+            '<div class="invalid-feedback"> Por favor, responsa la pregunta</div> '
+
+            +
+            '<td class="align-middle"><div class="">' +
+            '<input class="form-check-input" type="radio" id="p' + cambiarPuntoPorGuionBajo(id_pregunta) + '" name="p' + cambiarPuntoPorGuionBajo(id_pregunta) + '" value="'+ escalaInversa(inverso, 3) +'" required>' +
+            '<div class=""><label></label></div>' +
+            '</div></td>' +
+            '<div class="valid-feedback">Correcto</div> ' +
+            '<div class="invalid-feedback"> Por favor, responsa la pregunta</div> '
+
+            +
+            '<td class="align-middle"><div class="">' +
+            '<input class="form-check-input" type="radio" id="p' + cambiarPuntoPorGuionBajo(id_pregunta) + '" name="p' + cambiarPuntoPorGuionBajo(id_pregunta) + '" value="'+ escalaInversa(inverso, 4) +'" required>' +
+            '<div class=""><label></label></div>' +
+            '</div></td>' + +
+            '<div class="valid-feedback">Correcto</div> ' +
+            '<div class="invalid-feedback"> Por favor, responsa la pregunta</div> '+
             '</tr>';
     }
     $('#clima-tbody').append(trData);
@@ -362,8 +368,10 @@ function printClimaDesarrollo(){
         //Pega de html de como quiero ver las preguntas de desarrollo
         '<div class="mb-3">'+
             '<label for="'+ desarrollo.data[i].id +'" class="form-label">'+ desarrollo.data[i].texto +'</label>'+
-            '<textarea class="form-control" id="pd_'+ desarrollo.data[i].id +'" name="pd_'+ desarrollo.data[i].id +'" rows="3"></textarea>'+
-        '</div>';
+            '<textarea class="form-control" id="pd_'+ desarrollo.data[i].id +'" name="pd_'+ desarrollo.data[i].id +'" rows="3" required></textarea>'+
+            '<div class="valid-feedback">Correcto</div> ' +
+            '<div class="invalid-feedback"> Por favor, responsa la pregunta</div> '
+            '</div>';
     }
     
     $('#desarrollo-tbody').append(trData2);
@@ -556,21 +564,43 @@ function calcularDesSS2(){
     return desviacion;
 }
 
-//Hacer un Ajax para almacenar el cuestionario en BD.
-//Esta hueá no funciona ctmmmmmm me quiero morir
+
+function valideKey(evt){
+    
+    var code = (evt.which) ? evt.which : evt.keyCode;
+    
+    if(code==8) { // backspace.
+      return true;
+    } else if(code>=48 && code<=57) { // is a number.
+      return true;
+    } else{ // other keys.
+      return false;
+    }
+
+}
+
 function guardarRespuestasClima() {
+
+    let s1_promedio = calcularPromedioS1();
+    let s2_promedio = calcularPromedioS2();
+    let s2_des_estandard = calcularDesSS2();
+
+    let estado = validarFormulario();
+
+    if(estado == true){
+
     $.ajax({
         method: 'POST',
-        url: webservice + '/guardar/cuestionario/clima',
+        url: '/guardar/cuestionario/clima',
         headers: {
-            _token: $('input[name="_token"]').val()
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         crossDomain: true,
         dataType: 'text',
         data: {
-            
-            //Enviar 
-            //Email, id_curso
+   
+            email: $("#email_user").val(),
+            id_curso: $("#curso_user").val(),
            
             //Preguntas de sexo y edad.
             genero: $("input[name='genero']:checked").val(),
@@ -657,10 +687,9 @@ function guardarRespuestasClima() {
             pd_04: $("#pd_04").val(),
 
             //Cálculos
-            s1_promedio: calcularPromedioS1(),
-            s2_promedio: calcularPromedioS2(),
-            s2_des_estandard: calcularDesSS2()
-            
+            s1_promedio: s1_promedio,
+            s2_promedio: s2_promedio,
+            s2_des_estandard: s2_des_estandard
         },
 
         success: function(result){
@@ -671,8 +700,326 @@ function guardarRespuestasClima() {
         }
 
     });
+    }
 }
 
+function validarFormulario(){
 
+    if($("#email_user").val() == null){
+        alert("No se puede guardar el formulario con este email.");
+        return false;
+    }
+    else if($("#curso_user").val() == null){
+        alert("No se puede guardar el formulario para esta unidad.");
+        return false;
+    }
+    else if($("input[name='genero']:checked").val() == null){
+        alert("La pregunta de género no ha sido contestada.");
+        return false;
+    }
+    else if($("#edad").val() == null && $("#edad").val() == ""){
+        alert("La pregunta de edad no ha sido contestada.");
+        return false;
+    }
+    else if($("input[name='p01']:checked").val() ==  null){
+        alert("la pregunta 01 no ha sido respondida");
+        return false;
+    }
+    else if($("input[name='p02']:checked").val() == null){
+        alert("la pregunta 02 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p03']:checked").val() == null){
+        alert("la pregunta 03 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p04']:checked").val() == null){
+        alert("la pregunta 04 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p05']:checked").val() == null){
+        alert("la pregunta 05 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p06']:checked").val() == null){
+        alert("la pregunta 06 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p07']:checked").val() == null){
+        alert("la pregunta 07 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p08']:checked").val() == null){
+        alert("la pregunta 08 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p09']:checked").val() == null){
+        alert("la pregunta 09 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p10']:checked").val() == null){
+        alert("la pregunta 10 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p11']:checked").val() == null){
+        alert("la pregunta 11 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p12']:checked").val() == null){
+        alert("la pregunta 12 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p13']:checked").val() == null){
+        alert("la pregunta 13 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p14']:checked").val() == null){
+        alert("la pregunta 14 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p15']:checked").val() == null){
+        alert("la pregunta 15 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p16']:checked").val() == null){
+        alert("la pregunta 16 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p17']:checked").val() == null){
+        alert("la pregunta 17 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p18']:checked").val() == null){
+        alert("la pregunta 18 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p19']:checked").val() == null){
+        alert("la pregunta 19 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p20']:checked").val() == null){
+        alert("la pregunta 20 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p21']:checked").val() == null){
+        alert("la pregunta 21 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p22']:checked").val() == null){
+        alert("la pregunta 22 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p23']:checked").val() == null){
+        alert("la pregunta 23 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p24']:checked").val() == null){
+        alert("la pregunta 24 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p25']:checked").val() == null){
+        alert("la pregunta 25 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p26']:checked").val() == null){
+        alert("la pregunta 26 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p27']:checked").val() == null){
+        alert("la pregunta 27 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p28']:checked").val() == null){
+        alert("la pregunta 28 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p29']:checked").val() == null){
+        alert("la pregunta 29 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p30']:checked").val() == null){
+        alert("la pregunta 30 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p31']:checked").val() == null){
+        alert("la pregunta 31 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p32']:checked").val() == null){
+        alert("la pregunta 32 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p33']:checked").val() == null){
+        alert("la pregunta 33 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p34']:checked").val() == null){
+        alert("la pregunta 34 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p35']:checked").val() == null){
+        alert("la pregunta 35 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p36']:checked").val() == null){
+        alert("la pregunta 36 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p37']:checked").val() == null){
+        alert("la pregunta 37 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p38']:checked").val() == null){
+        alert("la pregunta 38 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p39']:checked").val() == null){
+        alert("la pregunta 39 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p40']:checked").val() == null){
+        alert("la pregunta 40 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p41']:checked").val() == null){
+        alert("la pregunta 41 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p42']:checked").val() == null){
+        alert("la pregunta 42 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p43']:checked").val() == null){
+        alert("la pregunta 43 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p44']:checked").val() == null){
+        alert("la pregunta 44 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p45']:checked").val() == null){
+        alert("la pregunta 45 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p46']:checked").val() == null){
+        alert("la pregunta 46 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p47']:checked").val() == null){
+        alert("la pregunta 47 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p48']:checked").val() == null){
+        alert("la pregunta 48 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p49']:checked").val() == null){
+        alert("la pregunta 49 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p50']:checked").val() == null){
+        alert("la pregunta 50 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p51_1']:checked").val() == null){
+        alert("la pregunta 51.1 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p51_2']:checked").val() == null){
+        alert("la pregunta 51.2 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p52_1']:checked").val() == null){
+        alert("la pregunta 52.1 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p52_2']:checked").val() == null){
+        alert("la pregunta 52.2 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p53_1']:checked").val() == null){
+        alert("la pregunta 53.1 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p53_2']:checked").val() == null){
+        alert("la pregunta 53.2 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p54_1']:checked").val() == null){
+        alert("la pregunta 54.1 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p54_2']:checked").val() == null){
+        alert("la pregunta 54.2 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p55_1']:checked").val() == null){
+        alert("la pregunta 55.1 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p55_2']:checked").val() == null){
+        alert("la pregunta 55.2 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p56_1']:checked").val() == null){
+        alert("la pregunta 56.1 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p56_2']:checked").val() == null){
+        alert("la pregunta 56.2 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p57_1']:checked").val() == null){
+        alert("la pregunta 57.1 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p57_2']:checked").val() == null){
+        alert("la pregunta 57.2 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p58_1']:checked").val() == null){
+        alert("la pregunta 58.1 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p58_2']:checked").val() == null){
+        alert("la pregunta 58.2 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p59_1']:checked").val() == null){
+        alert("la pregunta 59.1 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p59_2']:checked").val() == null){
+        alert("la pregunta 59.2 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p60_1']:checked").val() == null){
+        alert("la pregunta 60.1 no ha sido respondida.");
+        return false;
+    }
+    else if($("input[name='p60_2']:checked").val() == null){
+        alert("la pregunta 60.2 no ha sido respondida.");
+        return false;
+    }
+    else if($("#pd_01").val() == null && $("#pd_01").val() == ""){
+        alert("La pregunta de desarrollo 01 no ha sido contestada.");
+        return false;
+    }
+    else if($("#pd_02").val() == null && $("#pd_02").val() == ""){
+        alert("La pregunta de desarrollo 02 no ha sido contestada.");
+        return false;
+    }
+    else if($("#pd_03").val() == null && $("#pd_03").val() == ""){
+        alert("La pregunta de desarrollo 03 no ha sido contestada.");
+        return false;
+    }
+    else if($("#pd_04").val() == null && $("#pd_04").val() == ""){
+        alert("La pregunta de desarrollo 04 no ha sido contestada.");
+        return false;
+    }
+
+    return true;
+
+}
 
 

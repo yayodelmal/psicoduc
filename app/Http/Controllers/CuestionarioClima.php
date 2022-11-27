@@ -693,6 +693,7 @@ class CuestionarioClima extends Controller
 
     public function guardarCuestionarioClima(Request $request)
     {
+        
         $post = $request->all();
         
         //Validar que venga el Email y el curso del funcionario.
@@ -701,96 +702,111 @@ class CuestionarioClima extends Controller
         
         //Si no hay registro de que el funcionario no haya contestado y el Email y el curso son correctos, procedo a guardar.
         //preguntar si "Clima" tiene el "correo" y "curso" del usuario  if (isset($cuestionarioClima->email && $cuestionarioClima->curso_id))
-        dd($post);
-        $cuestionarioClima = new CClima();
-
-        $cuestionarioClima->email = "PruebaDeControlador@gmail.com";
-        $cuestionarioClima->id_curso = "1";
-
-        $cuestionarioClima->genero = $post["genero"] ?? null;
-        $cuestionarioClima->edad = $post["edad"] ?? null;
-        $cuestionarioClima->p01 = $post["p01"] ?? null;
-        $cuestionarioClima->p02 = $post["p02"] ?? null;
-        $cuestionarioClima->p03 = $post["p03"] ?? null;
-        $cuestionarioClima->p04 = $post["p04"] ?? null;
-        $cuestionarioClima->p05 = $post["p05"] ?? null;
-        $cuestionarioClima->p06 = $post["p06"] ?? null;
-        $cuestionarioClima->p07 = $post["p07"] ?? null;
-        $cuestionarioClima->p08 = $post["p08"] ?? null;
-        $cuestionarioClima->p09 = $post["p09"] ?? null;
-        $cuestionarioClima->p10 = $post["p10"] ?? null;
-        $cuestionarioClima->p11 = $post["p11"] ?? null;
-        $cuestionarioClima->p12 = $post["p12"] ?? null;
-        $cuestionarioClima->p13 = $post["p13"] ?? null;
-        $cuestionarioClima->p14 = $post["p14"] ?? null;
-        $cuestionarioClima->p15 = $post["p15"] ?? null;
-        $cuestionarioClima->p16 = $post["p16"] ?? null;
-        $cuestionarioClima->p17 = $post["p17"] ?? null;
-        $cuestionarioClima->p18 = $post["p18"] ?? null;
-        $cuestionarioClima->p19 = $post["p19"] ?? null;
-        $cuestionarioClima->p20 = $post["p20"] ?? null;
-        $cuestionarioClima->p21 = $post["p21"] ?? null;
-        $cuestionarioClima->p22 = $post["p22"] ?? null;
-        $cuestionarioClima->p23 = $post["p23"] ?? null;
-        $cuestionarioClima->p24 = $post["p24"] ?? null;
-        $cuestionarioClima->p25 = $post["p25"] ?? null;
-        $cuestionarioClima->p26 = $post["p26"] ?? null;
-        $cuestionarioClima->p27 = $post["p27"] ?? null;
-        $cuestionarioClima->p28 = $post["p28"] ?? null;
-        $cuestionarioClima->p29 = $post["p29"] ?? null;
-        $cuestionarioClima->p30 = $post["p30"] ?? null;
-        $cuestionarioClima->p31 = $post["p31"] ?? null;
-        $cuestionarioClima->p32 = $post["p32"] ?? null;
-        $cuestionarioClima->p33 = $post["p33"] ?? null;
-        $cuestionarioClima->p34 = $post["p34"] ?? null;
-        $cuestionarioClima->p35 = $post["p35"] ?? null;
-        $cuestionarioClima->p36 = $post["p36"] ?? null;
-        $cuestionarioClima->p37 = $post["p37"] ?? null;
-        $cuestionarioClima->p38 = $post["p38"] ?? null;
-        $cuestionarioClima->p39 = $post["p39"] ?? null;
-        $cuestionarioClima->p40 = $post["p40"] ?? null;
-        $cuestionarioClima->p41 = $post["p41"] ?? null;
-        $cuestionarioClima->p42 = $post["p42"] ?? null;
-        $cuestionarioClima->p43 = $post["p43"] ?? null;
-        $cuestionarioClima->p44 = $post["p44"] ?? null;
-        $cuestionarioClima->p45 = $post["p45"] ?? null;
-        $cuestionarioClima->p46 = $post["p46"] ?? null;
-        $cuestionarioClima->p47 = $post["p47"] ?? null;
-        $cuestionarioClima->p48 = $post["p48"] ?? null;
-        $cuestionarioClima->p49 = $post["p49"] ?? null;
-        $cuestionarioClima->p50 = $post["p50"] ?? null;
         
-        $cuestionarioClima->p51_1 = $post["p51_1"] ?? null;
-        $cuestionarioClima->p51_2 = $post["p51_2"] ?? null;
-        $cuestionarioClima->p52_1 = $post["p52_1"] ?? null;
-        $cuestionarioClima->p52_2 = $post["p52_2"] ?? null;
-        $cuestionarioClima->p53_1 = $post["p53_1"] ?? null;
-        $cuestionarioClima->p53_2 = $post["p53_2"] ?? null;
-        $cuestionarioClima->p54_1 = $post["p54_1"] ?? null;
-        $cuestionarioClima->p54_2 = $post["p54_2"] ?? null;
-        $cuestionarioClima->p55_1 = $post["p55_1"] ?? null;
-        $cuestionarioClima->p55_2 = $post["p55_2"] ?? null;
-        $cuestionarioClima->p56_1 = $post["p56_1"] ?? null;
-        $cuestionarioClima->p56_2 = $post["p56_2"] ?? null;
-        $cuestionarioClima->p57_1 = $post["p57_1"] ?? null;
-        $cuestionarioClima->p57_2 = $post["p57_2"] ?? null;
-        $cuestionarioClima->p58_1 = $post["p58_1"] ?? null;
-        $cuestionarioClima->p58_2 = $post["p58_2"] ?? null;
-        $cuestionarioClima->p59_1 = $post["p59_1"] ?? null;
-        $cuestionarioClima->p59_2 = $post["p59_2"] ?? null;
-        $cuestionarioClima->p60_1 = $post["p60_1"] ?? null;
-        $cuestionarioClima->p60_2 = $post["p60_2"] ?? null;
-
-        $cuestionarioClima->pd_01 = $post["pd_01"] ?? null;
-        $cuestionarioClima->pd_02 = $post["pd_02"] ?? null;
-        $cuestionarioClima->pd_03 = $post["pd_03"] ?? null;
-        $cuestionarioClima->pd_04 = $post["pd_04"] ?? null;
-
-        $cuestionarioClima->s1_promedio = $post["s1_promedio"] ?? null;
-        $cuestionarioClima->s2_promedio = $post["s2_promedio"] ?? null;
-        $cuestionarioClima->s2_des_estandard = $post["s2_des_estandard"] ?? null;
         
-        $cuestionarioClima->save();
+        try {
+
+            $cuestionarioClima = new CClima();
+
+            $cuestionarioClima->email = $post["email"] ?? null;
+            $cuestionarioClima->id_curso = $post["id_curso"] ?? null;
+
+            $cuestionarioClima->genero = $post["genero"] ?? null;
+            $cuestionarioClima->edad = $post["edad"] ?? null;
+            $cuestionarioClima->p01 = $post["p01"] ?? null;
+            $cuestionarioClima->p02 = $post["p02"] ?? null;
+            $cuestionarioClima->p03 = $post["p03"] ?? null;
+            $cuestionarioClima->p04 = $post["p04"] ?? null;
+            $cuestionarioClima->p05 = $post["p05"] ?? null;
+            $cuestionarioClima->p06 = $post["p06"] ?? null;
+            $cuestionarioClima->p07 = $post["p07"] ?? null;
+            $cuestionarioClima->p08 = $post["p08"] ?? null;
+            $cuestionarioClima->p09 = $post["p09"] ?? null;
+            $cuestionarioClima->p10 = $post["p10"] ?? null;
+            $cuestionarioClima->p11 = $post["p11"] ?? null;
+            $cuestionarioClima->p12 = $post["p12"] ?? null;
+            $cuestionarioClima->p13 = $post["p13"] ?? null;
+            $cuestionarioClima->p14 = $post["p14"] ?? null;
+            $cuestionarioClima->p15 = $post["p15"] ?? null;
+            $cuestionarioClima->p16 = $post["p16"] ?? null;
+            $cuestionarioClima->p17 = $post["p17"] ?? null;
+            $cuestionarioClima->p18 = $post["p18"] ?? null;
+            $cuestionarioClima->p19 = $post["p19"] ?? null;
+            $cuestionarioClima->p20 = $post["p20"] ?? null;
+            $cuestionarioClima->p21 = $post["p21"] ?? null;
+            $cuestionarioClima->p22 = $post["p22"] ?? null;
+            $cuestionarioClima->p23 = $post["p23"] ?? null;
+            $cuestionarioClima->p24 = $post["p24"] ?? null;
+            $cuestionarioClima->p25 = $post["p25"] ?? null;
+            $cuestionarioClima->p26 = $post["p26"] ?? null;
+            $cuestionarioClima->p27 = $post["p27"] ?? null;
+            $cuestionarioClima->p28 = $post["p28"] ?? null;
+            $cuestionarioClima->p29 = $post["p29"] ?? null;
+            $cuestionarioClima->p30 = $post["p30"] ?? null;
+            $cuestionarioClima->p31 = $post["p31"] ?? null;
+            $cuestionarioClima->p32 = $post["p32"] ?? null;
+            $cuestionarioClima->p33 = $post["p33"] ?? null;
+            $cuestionarioClima->p34 = $post["p34"] ?? null;
+            $cuestionarioClima->p35 = $post["p35"] ?? null;
+            $cuestionarioClima->p36 = $post["p36"] ?? null;
+            $cuestionarioClima->p37 = $post["p37"] ?? null;
+            $cuestionarioClima->p38 = $post["p38"] ?? null;
+            $cuestionarioClima->p39 = $post["p39"] ?? null;
+            $cuestionarioClima->p40 = $post["p40"] ?? null;
+            $cuestionarioClima->p41 = $post["p41"] ?? null;
+            $cuestionarioClima->p42 = $post["p42"] ?? null;
+            $cuestionarioClima->p43 = $post["p43"] ?? null;
+            $cuestionarioClima->p44 = $post["p44"] ?? null;
+            $cuestionarioClima->p45 = $post["p45"] ?? null;
+            $cuestionarioClima->p46 = $post["p46"] ?? null;
+            $cuestionarioClima->p47 = $post["p47"] ?? null;
+            $cuestionarioClima->p48 = $post["p48"] ?? null;
+            $cuestionarioClima->p49 = $post["p49"] ?? null;
+            $cuestionarioClima->p50 = $post["p50"] ?? null;
+            
+            $cuestionarioClima->p51_1 = $post["p51_1"] ?? null;
+            $cuestionarioClima->p51_2 = $post["p51_2"] ?? null;
+            $cuestionarioClima->p52_1 = $post["p52_1"] ?? null;
+            $cuestionarioClima->p52_2 = $post["p52_2"] ?? null;
+            $cuestionarioClima->p53_1 = $post["p53_1"] ?? null;
+            $cuestionarioClima->p53_2 = $post["p53_2"] ?? null;
+            $cuestionarioClima->p54_1 = $post["p54_1"] ?? null;
+            $cuestionarioClima->p54_2 = $post["p54_2"] ?? null;
+            $cuestionarioClima->p55_1 = $post["p55_1"] ?? null;
+            $cuestionarioClima->p55_2 = $post["p55_2"] ?? null;
+            $cuestionarioClima->p56_1 = $post["p56_1"] ?? null;
+            $cuestionarioClima->p56_2 = $post["p56_2"] ?? null;
+            $cuestionarioClima->p57_1 = $post["p57_1"] ?? null;
+            $cuestionarioClima->p57_2 = $post["p57_2"] ?? null;
+            $cuestionarioClima->p58_1 = $post["p58_1"] ?? null;
+            $cuestionarioClima->p58_2 = $post["p58_2"] ?? null;
+            $cuestionarioClima->p59_1 = $post["p59_1"] ?? null;
+            $cuestionarioClima->p59_2 = $post["p59_2"] ?? null;
+            $cuestionarioClima->p60_1 = $post["p60_1"] ?? null;
+            $cuestionarioClima->p60_2 = $post["p60_2"] ?? null;
+
+            $cuestionarioClima->pd_01 = $post["pd_01"] ?? null;
+            $cuestionarioClima->pd_02 = $post["pd_02"] ?? null;
+            $cuestionarioClima->pd_03 = $post["pd_03"] ?? null;
+            $cuestionarioClima->pd_04 = $post["pd_04"] ?? null;
+
+            $cuestionarioClima->s1_promedio = $post["s1_promedio"] ?? null;
+            $cuestionarioClima->s2_promedio = $post["s2_promedio"] ?? null;
+            $cuestionarioClima->s2_des_estandard = $post["s2_des_estandard"] ?? null;
+            
+            $cuestionarioClima->save();
+
+            return $cuestionarioClima;
+
+
+        } catch (\Illuminate\Database\QueryException $ex) {
+            
+            return $ex;
+        }
+
+
+
+        
 
     }
 

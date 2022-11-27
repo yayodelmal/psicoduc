@@ -8,7 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+    
     <title>Cuestionario de Clima</title>
 
     <!-- Custom fonts for this template-->
@@ -40,8 +41,6 @@
                         <!-- Nested Row within Card Body -->
                         <div class="row">
                             
-                            
-
                             <div class="col-lg-12">
                                 
                                 <div class="p-5">
@@ -49,6 +48,10 @@
                                     <div class="mb-1 small">
                                     Bienvenido, {{ $userData["nombre_user"]." ".$userData["apellidos_user"] }}
                                     </div>
+
+                                    <input type="hidden" id="email_user" value="{{ $userData["email_user"] }}">
+                                    <input type="hidden" id="curso_user" value="{{ $userData["curso_user"] }}">
+
 
                                     <br/>
                                     <br/>
@@ -74,8 +77,9 @@
                                     @endif
 
                                     <br/>
-                                    <form class="user" method="POST" action="{{ route('guardarCuestionarioClima') }}" accept-charset="UTF-8" enctype="multipart/form-data">
-                                    @csrf
+
+                                    {{-- <form class="user" method="POST" action="{{ route('guardarCuestionarioClima') }}" accept-charset="UTF-8" enctype="multipart/form-data"> --}}
+                                    {{-- @csrf --}}
         
                                         
                                             <table class="table table-responsive">
@@ -105,7 +109,7 @@
                                                 <tr>
                                                     <th>Edad</th>
                                                     <td>
-                                                        <input id="edad" name="edad" type="number" min="1" max="100">
+                                                        <input style="width : 50px;" type="text" id="edad" name="edad" onkeypress="return valideKey(event);" />
                                                     </td>
                                                 </tr>
                                             </table>
@@ -124,17 +128,21 @@
                                             <tbody id="clima-tbody" class="text-secondary">
                                             </tbody>
                                         </table>
-                            
+
+
+
+                                        <br/>
+                                        <p><b>A continuación, encontrará 4 preguntas, las cuales tienen por objetivo conocer su percepción con respecto a lo consultado</b></p>
+                                        <br/>
+
                                         <div id="desarrollo-tbody"></div>
                                              <div class="text-center">
-                            
                                                 <div class="text-center">
-                                                    <button type="submit" class="btn btn-success" id="btnEnviar">Finalizar cuestionario</button>
+                                                    <button type="submit" class="btn btn-success" onclick="guardarRespuestasClima()" id="btnEnviar">Finalizar cuestionario</button>
                                                 </div>
-                                                
                                         </div>
                                        
-                                    </form>
+                                    {{-- </form> --}}
                                 </div>
                             </div>
                         </div>
