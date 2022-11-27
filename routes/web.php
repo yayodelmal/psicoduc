@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 
 /*
@@ -23,6 +24,7 @@ Auth::routes();
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/home', [App\Http\Controllers\CuestionarioClima::class, 'datosDashboardClima'])->name('home');
 
+
 //Manejo de funcionarios
 Route::get('/listaFuncionarios', [App\Http\Controllers\MatriculaController::class, 'index'])->name('listaFuncionarios');
 Route::get('/registrar/funcionario/{id}', [App\Http\Controllers\MatriculaController::class, 'registrar_funcionario'])->name('registrarFuncionario');
@@ -36,5 +38,6 @@ Route::post('cuestionario/clima', [App\Http\Controllers\CuestionarioClima::class
 //Instrumento - Cuestionario de Clima
 Route::get('/cuestionario-de-clima', [App\Http\Controllers\CuestionarioClima::class, 'index'])->name('cuestionarioClima');
 Route::post('/guardar/cuestionario/clima', [App\Http\Controllers\CuestionarioClima::class, 'guardarCuestionarioClima'])->name('guardarCuestionarioClima');
+
 Route::get('/traerRespuestas/cuestionario/clima', [App\Http\Controllers\CuestionarioClima::class, 'traerRespuestas'])->name('traerRespuestas');
 Route::get('/estudio/clima', [App\Http\Controllers\CuestionarioClima::class, 'vistaEstudio'])->name('vistaEstudio');

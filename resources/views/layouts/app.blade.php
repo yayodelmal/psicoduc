@@ -69,6 +69,7 @@
                         {{-- <h6 class="collapse-header">Custom Components:</h6> --}}
                         <a class="collapse-item" href="{{ route('listaFuncionarios') }}">Funcionarios</a>
                         <a class="collapse-item" href="{{ route('cuestionarioClima') }}">Cuestionario de Clima</a>
+                        {{-- <a class="collapse-item" href="{{ route('') }}">Agregar usuarios</a> --}}
                     </div>
                 </div>
             </li>
