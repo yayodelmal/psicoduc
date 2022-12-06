@@ -12,12 +12,6 @@
                             <div class="col-10">
                                 <b>Nuevo Funcionario</b>
                             </div>
-                            <div class="col-2">
-                                <a  href="{{ route('listaFuncionarios') }}" 
-                                    class="btn btn-info"
-                                    role="button">Regresar
-                                </a>
-                            </div>
                         </div>
                     </div>
                     

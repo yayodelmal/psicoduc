@@ -41,3 +41,8 @@ Route::post('/guardar/cuestionario/clima', [App\Http\Controllers\CuestionarioCli
 
 Route::get('/traerRespuestas/cuestionario/clima', [App\Http\Controllers\CuestionarioClima::class, 'traerRespuestas'])->name('traerRespuestas');
 Route::get('/estudio/clima', [App\Http\Controllers\CuestionarioClima::class, 'vistaEstudio'])->name('vistaEstudio');
+
+//Intervenciones
+Route::get('/intervenciones', [App\Http\Controllers\IntervencionController::class, 'index'])->name('listaIntervenciones');
+Route::get('/intervenciones/crear', [App\Http\Controllers\IntervencionController::class, 'crearIntervencion'])->name('crearIntervencion');
+Route::post('/intervenciones/registrar', [App\Http\Controllers\IntervencionController::class, 'registrarIntervencion'])->name('registrarIntervencion');

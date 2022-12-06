@@ -41,8 +41,6 @@ class CuestionarioClima extends Controller
         $listadeunidades = $this->obtenerUnidades();
         $contador = 0;
 
-        
-        
         foreach($listadeunidades as $item){
             
             $dashboardClimaData[$contador]["unidad"] = $item["fullname"];
@@ -54,15 +52,14 @@ class CuestionarioClima extends Controller
                 $dashboardClimaData[$contador]["promedio"] = 0;
                 $contador = $contador + 1;
             }else{
-                $promedio = (($aplicacionClima * 100)/$listaFuncionarios);
+                $promedio = round(($aplicacionClima * 100)/$listaFuncionarios);
+
                 $dashboardClimaData[$contador]["promedio"] = $promedio;
 
                 $contador = $contador + 1;
             }
             
         }
-        
-        
         
         return view('welcome',['dashboardClimaData' => $dashboardClimaData]);
     }

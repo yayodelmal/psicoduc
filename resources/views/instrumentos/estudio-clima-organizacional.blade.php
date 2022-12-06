@@ -183,6 +183,8 @@
 
                         <h4>Resultados de Liderazgo</h4>
 
+                        {{-- {{ dd($EstudioClima) }} --}}
+
                         <script type="text/javascript">
 
                             var array = [

@@ -1,0 +1,13 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Instrumentos extends Model
+{
+    use HasFactory;
+    protected $table = 'instrumentos';
+	protected $primaryKey  = 'id_instrumento';
+}
