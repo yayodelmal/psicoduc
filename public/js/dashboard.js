@@ -52,16 +52,12 @@ function procesaData(data){
                 label: 'Cantidad de funcionarios',
                 data: totalFuncionarios,
                 borderWidth: 1,
-                backgroundColor: ['#ffce56', '#cc65fe', '#ff6384', '#36a2eb']
+                backgroundColor: ['#ffce56', '#cc65fe', '#ff6384', '#36a2eb'],
+
             }]
         },
         options: {
 
-        scales: {
-            y: {
-            beginAtZero: true
-            }
-        }
         }
     });
 

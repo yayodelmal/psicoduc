@@ -165,21 +165,18 @@ function colorPromedio($promedio){
                         class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                         <h6 class="m-0 font-weight-bold text-primary">Funcionarios por unidad</h6>
                     </div>
-
-                    <div class="card-body">
-                        <div class="chart-pie pt-4 pb-2">
-                            <div>
-                                <canvas id="myChart"></canvas>
-                              </div>
-
-                              <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-                              <script>
-                                traerDatos();
-                              </script>
-
-                        </div>
+                    <div class="chart-container" style="height:auto ; width: 550px ; margin: auto;">
+                        <br/>
+                        <canvas id="myChart"></canvas>
+                        <br/>
                     </div>
+
+                            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+                            <script>
+                            traerDatos();
+                            </script>
+
                 </div>
             </div>
 
