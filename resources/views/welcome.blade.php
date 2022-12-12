@@ -1,6 +1,10 @@
 @extends('layouts.app')
 @section('content')
 
+<script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+<script src="{{ asset('js/dashboard.js') }}"></script>
+<meta name="csrf-token" content="{{ csrf_token() }}" />
+
 <?php
 
 function colorPromedio($promedio){
@@ -26,7 +30,7 @@ function colorPromedio($promedio){
             $color = "progress-bar bg-info";
             return $color;
         break;
-        
+
         case ($promedio > 80 && $promedio <= 100 ):
             $color = "progress-bar bg-success";
             return $color;
@@ -46,31 +50,145 @@ function colorPromedio($promedio){
                     class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> --}}
         </div>
 
+
+
         <div class="row">
 
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    Total de intervenciones</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $dashboardData["Total_intervenciones"] }}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                    Total de unidades</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $dashboardData["Total_unidades"] }}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-user fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-info shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Avance general
+                                </div>
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col-auto">
+                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ $dashboardData["Avance"] }}%</div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="progress progress-sm mr-2">
+                                            <div class="{{ colorPromedio($dashboardData["Avance"]) }}" role="progressbar"
+                                                style="width: {{ $dashboardData["Avance"] }}%" aria-valuenow="{{ $dashboardData["Avance"] }}" aria-valuemin="0"
+                                                aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-warning shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                    Pendientes en contestar</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{$dashboardData["Pendientes"]}}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-comments fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
             <!-- Content Column -->
             <div class="col-lg-6 mb-4">
-
                 <!-- Project Card Example -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Intervenciones</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">Intervenciones activas</h6>
                     </div>
 
-                        <div class="card-body" id="avanceIntervencion">
-                            
-                            @foreach($dashboardClimaData as $data)
-                                <h4 class="small font-weight-bold">{{$data["unidad"]}}- Cuestionario de Clima - Intervención noviembre 2022<span
-                                    class="float-right">{{$data["promedio"]}}%</span></h4>
-                                <div class="progress mb-4">
-                                    <div class="{{ colorPromedio($data["promedio"]) }}" role="progressbar" style="width: {{ $data["promedio"] }}%"
-                                        aria-valuenow="{{ $data["promedio"] }}" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                            @endforeach
-                        </div>
+                    <div class="card-body" id="avanceIntervencion">
+
+                        @foreach($dashboardData["intervencion"] as $data)
+                            <h4 class="small font-weight-bold">{{ $data["unidad"] }} - Intervención {{ $data["periodo"] }}<span
+                                class="float-right">{{$data["promedio"]}}%</span></h4>
+                            <div class="progress mb-4">
+                                <div class="{{ colorPromedio($data["promedio"]) }}" role="progressbar" style="width: {{ $data["promedio"] }}%"
+                                    aria-valuenow="{{ $data["promedio"] }}" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        @endforeach
+
+                    </div>
                 </div>
+            </div>
+
+            <div class="col-lg-6 mb-4">
+                <div class="card shadow mb-4">
+
+                    <div
+                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">Funcionarios por unidad</h6>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="chart-pie pt-4 pb-2">
+                            <div>
+                                <canvas id="myChart"></canvas>
+                              </div>
+
+                              <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+                              <script>
+                                traerDatos();
+                              </script>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
         </div>
+
+
     </div>
 </div>
+
 
 @endsection

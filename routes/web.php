@@ -22,7 +22,9 @@ Route::get('/', function () {
 Auth::routes();
 
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/home', [App\Http\Controllers\CuestionarioClima::class, 'datosDashboardClima'])->name('home');
+Route::get('/home', [App\Http\Controllers\DashboardController::class, 'index'])->name('home');
+Route::get('/traerFuncionariosUnidad', [App\Http\Controllers\DashboardController::class, 'traerFuncionariosUnidad'])->name('traerFuncionariosUnidad');
+
 
 
 //Manejo de funcionarios
