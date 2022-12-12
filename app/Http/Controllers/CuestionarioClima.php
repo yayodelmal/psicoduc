@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\CClima;
 use Illuminate\Support\Facades\DB;
 use App\Models\Matricular;
+use App\Models\Intervencion;
 
 
 class CuestionarioClima extends Controller
@@ -42,7 +43,7 @@ class CuestionarioClima extends Controller
         $contador = 0;
 
         foreach($listadeunidades as $item){
-            
+
             $dashboardClimaData[$contador]["unidad"] = $item["fullname"];
 
             $listaFuncionarios = Matricular::where('curso_id', $item["id"])->count();
@@ -58,14 +59,14 @@ class CuestionarioClima extends Controller
 
                 $contador = $contador + 1;
             }
-            
+
         }
-        
+
         return view('welcome',['dashboardClimaData' => $dashboardClimaData]);
     }
 
     public function verificarFuncionarioMoodle(Request $request){
-        
+
         $post = $request->all();
         $userData = array();
 
@@ -75,10 +76,10 @@ class CuestionarioClima extends Controller
             $userData["status"] = false;
             return redirect(route('pasarelaMoodle'))->with('statuserror', 'Correo o contraseña inválido.');
         }
-        
+
         if($post["password"] == $funcionarioData->contrasenia){
             $funcionario = $this->obtenerFuncionario($post["email"]);
-            
+
             if(count($funcionario) == 0){
                 $userData["status"] = false;
                 return redirect(route('pasarelaMoodle'))->with('statuserror', 'El usuario no se encuentra ingresado a Moodle.');
@@ -105,16 +106,16 @@ class CuestionarioClima extends Controller
             }else{
                 return redirect(route('pasarelaMoodle'))->with('statuserror', 'Usted ya ha contestado el Cuestionario de Clima del área '.$intervencion[0]->fullname);
             }
-            
+
         }else{
             $userData["status"] = false;
             return redirect(route('pasarelaMoodle'))->with('statuserror', 'Correo o contraseña inválido.');
         }
-            
+
     }
 
     public function definirResultadoTabla($media){
-        
+
         //Resultado basado en media.
         if($media >= 1.00 && $media <= 1.99){
             return "Muy favorable";
@@ -133,16 +134,26 @@ class CuestionarioClima extends Controller
         }
     }
 
-    public function vistaEstudio(){
-        $EstudioClima = $this->traerRespuestas();
-        $listJsonResult = json_decode($EstudioClima->getContent());
-        return view('instrumentos.estudio-clima-organizacional', ['EstudioClima' => $listJsonResult]);
+    public function vistaEstudio($id){
+
+        if (CClima::where('id_intervencion', $id)->exists()){
+
+            $EstudioClima = $this->traerRespuestas($id);
+            $listJsonResult = json_decode($EstudioClima->getContent());
+            return view('instrumentos.estudio-clima-organizacional', ['EstudioClima' => $listJsonResult]);
+
+        }else{
+            return back()->with('statuserror', 'Aún no hay registros de instrumentos respondidos.');
+        }
+
+
     }
 
-    public function traerRespuestas(){
+    public function traerRespuestas($id){
+
 
         $estudioClima = array();
-        
+
         $sumaEstructura = 0;
         $estructuraSumatoria = 0;
         $estructuraVarianza = 0;
@@ -150,16 +161,16 @@ class CuestionarioClima extends Controller
         $cantidadPregunta = 0;
         $contador = 0;
         $array_aux = [];
-        
-        $estructura = "SELECT p01,p02,p03,p04,p05,p06,p07,p08 FROM cuestionario_clima WHERE id_curso = 11";
+
+        $estructura = "SELECT p01,p02,p03,p04,p05,p06,p07,p08 FROM cuestionario_clima WHERE id_intervencion = ".$id;
         $sql = DB::select($estructura);
         $estudioClima['estructura'] = json_decode(json_encode($sql), true);
-    
+
             for($a = 0; $a < count($estudioClima['estructura']); $a++ ){
                 $contador = (count($estudioClima['estructura'][$a]));
                 $cantidadPregunta += $contador;
             }
-            
+
             for($a = 0; $a < count($estudioClima['estructura']); $a++ ){
                 $contador = (array_sum($estudioClima['estructura'][$a]));
                 $sumaEstructura += $contador;
@@ -177,8 +188,8 @@ class CuestionarioClima extends Controller
                 foreach($array_aux as $item){
                     array_push($estructuraRespuestas, $item);
                 }
-            } 
-            
+            }
+
             //calcular varianza
             for($a=0; $a<$cantidadPregunta; $a++){
                 $estructuraSumatoria = pow(($estructuraRespuestas[$a] - $estructuraMedia), 2);
@@ -187,7 +198,7 @@ class CuestionarioClima extends Controller
 
             $estructuraVarianza = ($estructuraVarianza/($cantidadPregunta - 1));
             $estudioClima['estructura_varianza'] = $estructuraVarianza;
-            
+
             //Calcular la desviación
             $estructuraDesviacion = sqrt($estructuraVarianza);
             $estructuraDesviacion = round($estructuraDesviacion, 2);
@@ -197,41 +208,41 @@ class CuestionarioClima extends Controller
             $resultadoEstructura = $this->definirResultadoTabla($estructuraMedia);
             $estudioClima['estructura_resultado'] = $resultadoEstructura;
 
-            
+
         $sumaResponsabilidad = 0;
         $responsabilidadSumatoria = 0;
         $responsabilidadVarianza = 0;
         $responsabilidadDesviacion = 0;
         $cantidadPregunta = 0;
 
-        $responsabilidad = "SELECT p09, p10, p11, p12, p13, p14, p15 FROM cuestionario_clima WHERE id_curso = 11";
+        $responsabilidad = "SELECT p09, p10, p11, p12, p13, p14, p15 FROM cuestionario_clima WHERE id_intervencion = ".$id;
         $sql = DB::select($responsabilidad);
         $estudioClima['responsabilidad'] = json_decode(json_encode($sql), true);
-        
+
             for($a = 0; $a < count($estudioClima['responsabilidad']); $a++ ){
                 $contador = (count($estudioClima['responsabilidad'][$a]));
                 $cantidadPregunta += $contador;
             }
-            
+
             for($a = 0; $a < count($estudioClima['responsabilidad']); $a++ ){
                 $contador = (array_sum($estudioClima['responsabilidad'][$a]));
                 $sumaResponsabilidad += $contador;
             }
-        
+
             $responsabilidadMedia = ($sumaResponsabilidad/$cantidadPregunta);
             $responsabilidadMedia = bcdiv($responsabilidadMedia, 1, 2);
             $responsabilidadMedia = floatval($responsabilidadMedia);
             $estudioClima['responsabilidad_media'] = $responsabilidadMedia;
 
             $responsabilidadRespuestas = [];
-            
+
             for($a = 0; $a < count($estudioClima['responsabilidad']); $a++ ){
                 $array_aux = array_values($estudioClima['responsabilidad'][$a]);
                 foreach($array_aux as $item){
                     array_push($responsabilidadRespuestas, $item);
                 }
-            } 
-            
+            }
+
             //calcular varianza
             for($a=0; $a<$cantidadPregunta; $a++){
                 $responsabilidadSumatoria = pow(($responsabilidadRespuestas[$a] - $responsabilidadMedia), 2);
@@ -240,7 +251,7 @@ class CuestionarioClima extends Controller
 
             $responsabilidadVarianza = ($responsabilidadVarianza/($cantidadPregunta - 1));
             $estudioClima['responsabilidad_varianza'] = $responsabilidadVarianza;
-            
+
             //Calcular la desviación
             $responsabilidadDesviacion = sqrt($responsabilidadVarianza);
             $responsabilidadDesviacion = round($responsabilidadDesviacion, 2);
@@ -257,7 +268,7 @@ class CuestionarioClima extends Controller
         $recompensaDesviacion = 0;
         $cantidadPregunta = 0;
 
-        $recompensa = "SELECT p16, p17, p18, p19, p20 FROM cuestionario_clima WHERE id_curso = 11";
+        $recompensa = "SELECT p16, p17, p18, p19, p20 FROM cuestionario_clima WHERE id_intervencion = ".$id;
         $sql = DB::select($recompensa);
         $estudioClima['recompensa'] = json_decode(json_encode($sql), true);
 
@@ -265,7 +276,7 @@ class CuestionarioClima extends Controller
             $contador = (count($estudioClima['recompensa'][$a]));
             $cantidadPregunta += $contador;
         }
-        
+
         for($a = 0; $a < count($estudioClima['recompensa']); $a++ ){
             $contador = (array_sum($estudioClima['recompensa'][$a]));
             $sumaRecompensa += $contador;
@@ -282,8 +293,8 @@ class CuestionarioClima extends Controller
                 foreach($array_aux as $item){
                     array_push($recompensaRespuestas, $item);
                 }
-            } 
-            
+            }
+
             //calcular varianza
             for($a=0; $a<$cantidadPregunta; $a++){
                 $recompensaSumatoria = pow(($recompensaRespuestas[$a] - $recompensaMedia), 2);
@@ -292,7 +303,7 @@ class CuestionarioClima extends Controller
 
             $recompensaVarianza = ($recompensaVarianza/($cantidadPregunta - 1));
             $estudioClima['recompensa_varianza'] = $recompensaVarianza;
-            
+
             //Calcular la desviación
             $recompensaDesviacion = sqrt($recompensaVarianza);
             $recompensaDesviacion = round($recompensaDesviacion, 2);
@@ -302,7 +313,7 @@ class CuestionarioClima extends Controller
             $resultadoRecompensa = $this->definirResultadoTabla($recompensaMedia);
             $estudioClima['recompensa_resultado'] = $resultadoRecompensa;
 
-        
+
 
         $sumaDesafio = 0;
         $desafioSumatoria = 0;
@@ -310,20 +321,20 @@ class CuestionarioClima extends Controller
         $desafioDesviacion = 0;
         $cantidadPregunta = 0;
 
-        $desafio = "SELECT p21, p22, p23, p24, p25, p26 FROM cuestionario_clima WHERE id_curso = 11";
+        $desafio = "SELECT p21, p22, p23, p24, p25, p26 FROM cuestionario_clima WHERE id_intervencion = ".$id;
         $sql = DB::select($desafio);
-        $estudioClima['desafio'] = json_decode(json_encode($sql), true); 
+        $estudioClima['desafio'] = json_decode(json_encode($sql), true);
 
         for($a = 0; $a < count($estudioClima['desafio']); $a++ ){
             $contador = (count($estudioClima['desafio'][$a]));
             $cantidadPregunta += $contador;
         }
-        
+
         for($a = 0; $a < count($estudioClima['desafio']); $a++ ){
             $contador = (array_sum($estudioClima['desafio'][$a]));
             $sumaDesafio += $contador;
         }
-        
+
             $desafioMedia = ($sumaDesafio/$cantidadPregunta);
             $desafioMedia = bcdiv($desafioMedia, 1, 2);
             $desafioMedia = floatval($desafioMedia);
@@ -335,8 +346,8 @@ class CuestionarioClima extends Controller
                 foreach($array_aux as $item){
                     array_push($desafioRespuestas, $item);
                 }
-            } 
-            
+            }
+
             //calcular varianza
             for($a=0; $a<$cantidadPregunta; $a++){
                 $desafioSumatoria = pow(($desafioRespuestas[$a] - $desafioMedia), 2);
@@ -345,7 +356,7 @@ class CuestionarioClima extends Controller
 
             $desafioVarianza = ($desafioVarianza/($cantidadPregunta - 1));
             $estudioClima['desafio_varianza'] = $desafioVarianza;
-            
+
             //Calcular la desviación
             $desafioDesviacion = sqrt($desafioVarianza);
             $desafioDesviacion = round($desafioDesviacion, 2);
@@ -363,7 +374,7 @@ class CuestionarioClima extends Controller
         $relacionesDesviacion = 0;
         $cantidadPregunta = 0;
 
-        $relaciones = "SELECT p27, p28, p29, p30, p31 FROM cuestionario_clima WHERE id_curso = 11";
+        $relaciones = "SELECT p27, p28, p29, p30, p31 FROM cuestionario_clima WHERE id_intervencion = ".$id;
         $sql = DB::select($relaciones);
         $estudioClima['relaciones'] = json_decode(json_encode($sql), true);
 
@@ -371,7 +382,7 @@ class CuestionarioClima extends Controller
             $contador = (count($estudioClima['relaciones'][$a]));
             $cantidadPregunta += $contador;
         }
-        
+
         for($a = 0; $a < count($estudioClima['relaciones']); $a++ ){
             $contador = (array_sum($estudioClima['relaciones'][$a]));
             $sumaRelaciones += $contador;
@@ -388,8 +399,8 @@ class CuestionarioClima extends Controller
                 foreach($array_aux as $item){
                     array_push($relacionesRespuestas, $item);
                 }
-            } 
-            
+            }
+
             //calcular varianza
             for($a=0; $a<$cantidadPregunta; $a++){
                 $relacionesSumatoria = pow(($relacionesRespuestas[$a] - $relacionesMedia), 2);
@@ -398,7 +409,7 @@ class CuestionarioClima extends Controller
 
             $relacionesVarianza = ($relacionesVarianza/($cantidadPregunta - 1));
             $estudioClima['relaciones_varianza'] = $relacionesVarianza;
-            
+
             //Calcular la desviación
             $relacionesDesviacion = sqrt($relacionesVarianza);
             $relacionesDesviacion = round($relacionesDesviacion, 2);
@@ -407,7 +418,7 @@ class CuestionarioClima extends Controller
             //Resultado basado en media.
             $resultadoRelaciones = $this->definirResultadoTabla($relacionesMedia);
             $estudioClima['relaciones_resultado'] = $resultadoRelaciones;
-        
+
 
         $sumaCooperacion = 0;
         $cooperacionSumatoria = 0;
@@ -415,7 +426,7 @@ class CuestionarioClima extends Controller
         $cooperacionDesviacion = 0;
         $cantidadPregunta = 0;
 
-        $cooperacion = "SELECT p32, p33, p34, p35, p36 FROM cuestionario_clima WHERE id_curso = 11";
+        $cooperacion = "SELECT p32, p33, p34, p35, p36 FROM cuestionario_clima WHERE id_intervencion = ".$id;
         $sql = DB::select($cooperacion);
         $estudioClima['cooperacion'] = json_decode(json_encode($sql), true);
 
@@ -423,7 +434,7 @@ class CuestionarioClima extends Controller
             $contador = (count($estudioClima['cooperacion'][$a]));
             $cantidadPregunta += $contador;
         }
-        
+
         for($a = 0; $a < count($estudioClima['cooperacion']); $a++ ){
             $contador = (array_sum($estudioClima['cooperacion'][$a]));
             $sumaCooperacion += $contador;
@@ -441,7 +452,7 @@ class CuestionarioClima extends Controller
                     array_push($cooperacionRespuestas, $item);
                 }
             }
-            
+
             //calcular varianza
             for($a=0; $a<$cantidadPregunta; $a++){
                 $cooperacionSumatoria = pow(($cooperacionRespuestas[$a] - $cooperacionMedia), 2);
@@ -450,7 +461,7 @@ class CuestionarioClima extends Controller
 
             $cooperacionVarianza = ($cooperacionVarianza/($cantidadPregunta - 1));
             $estudioClima['cooperacion_varianza'] = $cooperacionVarianza;
-            
+
             //Calcular la desviación
             $cooperacionDesviacion = sqrt($cooperacionVarianza);
             $cooperacionDesviacion = round($cooperacionDesviacion, 2);
@@ -467,7 +478,7 @@ class CuestionarioClima extends Controller
         $estandaresDesviacion = 0;
         $cantidadPregunta = 0;
 
-        $estandares = "SELECT p37, p38, p39, p40, p41, p42 FROM cuestionario_clima WHERE id_curso = 11";
+        $estandares = "SELECT p37, p38, p39, p40, p41, p42 FROM cuestionario_clima WHERE id_intervencion = ".$id;
         $sql = DB::select($estandares);
         $estudioClima['estandares'] = json_decode(json_encode($sql), true);
 
@@ -475,7 +486,7 @@ class CuestionarioClima extends Controller
             $contador = (count($estudioClima['estandares'][$a]));
             $cantidadPregunta += $contador;
         }
-        
+
         for($a = 0; $a < count($estudioClima['estandares']); $a++ ){
             $contador = (array_sum($estudioClima['estandares'][$a]));
             $sumaEstandares += $contador;
@@ -493,7 +504,7 @@ class CuestionarioClima extends Controller
                     array_push($estandaresRespuestas, $item);
                 }
             }
-            
+
             //calcular varianza
             for($a=0; $a<$cantidadPregunta; $a++){
                 $estandaresSumatoria = pow(($estandaresRespuestas[$a] - $estandaresMedia), 2);
@@ -502,7 +513,7 @@ class CuestionarioClima extends Controller
 
             $estandaresVarianza = ($estandaresVarianza/($cantidadPregunta - 1));
             $estudioClima['estandares_varianza'] = $estandaresVarianza;
-            
+
             //Calcular la desviación
             $estandaresDesviacion = sqrt($estandaresVarianza);
             $estandaresDesviacion = round($estandaresDesviacion, 2);
@@ -519,7 +530,7 @@ class CuestionarioClima extends Controller
         $conflictoDesviacion = 0;
         $cantidadPregunta = 0;
 
-        $conflicto = "SELECT p43, p44, p45, p46 FROM cuestionario_clima WHERE id_curso = 11";
+        $conflicto = "SELECT p43, p44, p45, p46 FROM cuestionario_clima WHERE id_intervencion = ".$id;
         $sql = DB::select($conflicto);
         $estudioClima['conflicto'] = json_decode(json_encode($sql), true);
 
@@ -527,7 +538,7 @@ class CuestionarioClima extends Controller
             $contador = (count($estudioClima['conflicto'][$a]));
             $cantidadPregunta += $contador;
         }
-        
+
         for($a = 0; $a < count($estudioClima['conflicto']); $a++ ){
             $contador = (array_sum($estudioClima['conflicto'][$a]));
             $sumaConflicto += $contador;
@@ -545,7 +556,7 @@ class CuestionarioClima extends Controller
                     array_push($conflictoRespuestas, $item);
                 }
             }
-            
+
             //calcular varianza
             for($a=0; $a<$cantidadPregunta; $a++){
                 $conflictoSumatoria = pow(($conflictoRespuestas[$a] - $conflictoMedia), 2);
@@ -554,7 +565,7 @@ class CuestionarioClima extends Controller
 
             $conflictoVarianza = ($conflictoVarianza/($cantidadPregunta - 1));
             $estudioClima['conflicto_varianza'] = $conflictoVarianza;
-            
+
             //Calcular la desviación
             $conflictoDesviacion = sqrt($conflictoVarianza);
             $conflictoDesviacion = round($conflictoDesviacion, 2);
@@ -571,7 +582,7 @@ class CuestionarioClima extends Controller
         $identidadDesviacion = 0;
         $cantidadPregunta = 0;
 
-        $identidad = "SELECT p47, p48, p49, p50 FROM cuestionario_clima WHERE id_curso = 11";
+        $identidad = "SELECT p47, p48, p49, p50 FROM cuestionario_clima WHERE id_intervencion = ".$id;
         $sql = DB::select($identidad);
         $estudioClima['identidad'] = json_decode(json_encode($sql), true);
 
@@ -579,7 +590,7 @@ class CuestionarioClima extends Controller
             $contador = (count($estudioClima['identidad'][$a]));
             $cantidadPregunta += $contador;
         }
-        
+
         for($a = 0; $a < count($estudioClima['identidad']); $a++ ){
             $contador = (array_sum($estudioClima['identidad'][$a]));
             $sumaIdentidad += $contador;
@@ -597,7 +608,7 @@ class CuestionarioClima extends Controller
                     array_push($identidadRespuestas, $item);
                 }
             }
-            
+
             //calcular varianza
             for($a=0; $a<$cantidadPregunta; $a++){
                 $identidadSumatoria = pow(($identidadRespuestas[$a] - $identidadMedia), 2);
@@ -606,7 +617,7 @@ class CuestionarioClima extends Controller
 
             $identidadVarianza = ($identidadVarianza/($cantidadPregunta - 1));
             $estudioClima['identidad_varianza'] = $identidadVarianza;
-            
+
             //Calcular la desviación
             $identidadDesviacion = sqrt($identidadVarianza);
             $identidadDesviacion = round($identidadDesviacion, 2);
@@ -616,24 +627,24 @@ class CuestionarioClima extends Controller
             $resultadoIdentidad = $this->definirResultadoTabla($identidadMedia);
             $estudioClima['identidad_resultado'] = $resultadoIdentidad;
 
-        
+
         //Traer Totales
         $sumaTotales = 0;
         $totalesSumatoria = 0;
         $totalesVarianza = 0;
         $totalesDesviacion = 0;
         $cantidadPregunta = 0;
-    
+
         $total = "SELECT p01,p02,p03,p04,p05,p06,p07,p08,p09,p10,p11,p12,p13,p14,p15,p16,p17,p18,p19,p20,p21,p22,p23,p24,p25,p26,p27,p28,p29,p30,p31,p32,p33,p34,p35,p36,p37,p38,p39,p40,p41,p42,p43,p44,p45,p46,
-        p47,p48,p49,p50 FROM cuestionario_clima WHERE id_curso = 11";
+        p47,p48,p49,p50 FROM cuestionario_clima WHERE id_intervencion = ".$id;
         $sql = DB::select($total);
         $estudioClima['totales'] = json_decode(json_encode($sql), true);
-        
+
         for($a = 0; $a < count($estudioClima['totales']); $a++ ){
             $contador = (count($estudioClima['totales'][$a]));
             $cantidadPregunta += $contador;
         }
-        
+
         for($a = 0; $a < count($estudioClima['totales']); $a++ ){
             $contador = (array_sum($estudioClima['totales'][$a]));
             $sumaTotales += $contador;
@@ -651,7 +662,7 @@ class CuestionarioClima extends Controller
                     array_push($totalesRespuestas, $item);
                 }
             }
-            
+
             //calcular varianza
             for($a=0; $a<$cantidadPregunta; $a++){
                 $totalesSumatoria = pow(($totalesRespuestas[$a] - $totalesMedia), 2);
@@ -660,7 +671,7 @@ class CuestionarioClima extends Controller
 
             $totalesVarianza = ($totalesVarianza/($cantidadPregunta - 1));
             $estudioClima['totales_varianza'] = $totalesVarianza;
-            
+
             //Calcular la desviación
             $totalesDesviacion = sqrt($totalesVarianza);
             $totalesDesviacion = round($totalesDesviacion, 2);
@@ -675,32 +686,41 @@ class CuestionarioClima extends Controller
         $sumaLiderazgo = 0;
         $array_auxuliar = [];
 
-        $liderazgo = "SELECT p51_1, p51_2, p52_1, p52_2, p53_1, p53_2, p54_1, p54_2, p55_1, p55_2, p56_1, p56_2, p57_1, p57_2, p58_1, p58_2, p59_1, p59_2, p60_1, p60_2 FROM cuestionario_clima WHERE id_curso = 11";
+        $liderazgo = "SELECT p51_1, p51_2, p52_1, p52_2, p53_1, p53_2, p54_1, p54_2, p55_1, p55_2, p56_1, p56_2, p57_1, p57_2, p58_1, p58_2, p59_1, p59_2, p60_1, p60_2 FROM cuestionario_clima WHERE id_intervencion = ".$id;
         $sql = DB::select($liderazgo);
         $estudioClima['liderazgo'] = json_decode(json_encode($sql), true);
-        
+
         for($a = 0; $a < count($estudioClima['liderazgo']); $a++ ){
             $array_auxuliar[$a] = ((array_sum($estudioClima['liderazgo'][$a]))/20);
         }
         $estudioClima['liderazgo_data'] = $array_auxuliar;
-        
+
         //dd($estudioClima);
         return response()->json($estudioClima);
     }
 
+    public function cuestionarioFinalizado($unidad){
+        return view('instrumentos.cuestionario-clima-finalizado', ['unidad' => $unidad]);
+    }
+
     public function guardarCuestionarioClima(Request $request)
     {
-        
+
         $post = $request->all();
-        
-        //Validar que venga el Email y el curso del funcionario.
 
         //Validar que efectivamente el funcionario no haya contestado el formulario antes.
-        
+
         //Si no hay registro de que el funcionario no haya contestado y el Email y el curso son correctos, procedo a guardar.
         //preguntar si "Clima" tiene el "correo" y "curso" del usuario  if (isset($cuestionarioClima->email && $cuestionarioClima->curso_id))
-        
-        
+
+        $Cuestionario = CClima::where('email',$post["email"] )
+            ->where('id_curso',$post["id_curso"])
+            ->first();
+
+        if($Cuestionario == null){
+            $traerIntervencion = Intervencion::where('estado', '1')->where('curso_id', '11')->first();
+        $resultado = json_decode(json_encode($traerIntervencion), true);
+
         try {
 
             $cuestionarioClima = new CClima();
@@ -760,7 +780,7 @@ class CuestionarioClima extends Controller
             $cuestionarioClima->p48 = $post["p48"] ?? null;
             $cuestionarioClima->p49 = $post["p49"] ?? null;
             $cuestionarioClima->p50 = $post["p50"] ?? null;
-            
+
             $cuestionarioClima->p51_1 = $post["p51_1"] ?? null;
             $cuestionarioClima->p51_2 = $post["p51_2"] ?? null;
             $cuestionarioClima->p52_1 = $post["p52_1"] ?? null;
@@ -790,21 +810,23 @@ class CuestionarioClima extends Controller
             $cuestionarioClima->s1_promedio = $post["s1_promedio"] ?? null;
             $cuestionarioClima->s2_promedio = $post["s2_promedio"] ?? null;
             $cuestionarioClima->s2_des_estandard = $post["s2_des_estandard"] ?? null;
-            
+            $cuestionarioClima->id_intervencion = $resultado["id_intervencion"];
+
             $cuestionarioClima->save();
 
-            return $cuestionarioClima;
-
+            //$finalizado = $this->cuestionarioFinalizado($post["id_curso"]);
+            return true;
 
         } catch (\Illuminate\Database\QueryException $ex) {
-            
+
             return $ex;
         }
 
-
-
-        
-
+        }else{
+            echo("Ya ha respondido.");
+        }
     }
+
+
 
 }

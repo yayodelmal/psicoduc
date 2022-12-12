@@ -4,17 +4,39 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Intervencion;
-use Mockery\Undefined;
 
 class IntervencionController extends Controller
 {
     public function index(Request $request){
 
+        $unidad = array();
+
         $lista = Intervencion::orderbydesc('id_intervencion')->paginate(10);
-        //dd($lista);
-        return view('intervenciones.intervenciones',['listaDeIntervenciones' => $lista]);
+        $resultado = json_decode(json_encode($lista), true);
+        
+            foreach($resultado["data"] as $item){
+                $listadeunidades = $this->obtenerUnidadesId($item["curso_id"]);
+                $unidad[$item["curso_id"]] = [$listadeunidades->fullname];
+            }
+        
+        return view('intervenciones.intervenciones',['listaDeIntervenciones' => $lista], ['listaDeUnidades' => $unidad]);
     }
 
+    public function finalizarIntervencion(Request $request, $id){
+
+        try{
+            
+            $finalizar = Intervencion::find($id);
+            $finalizar->estado = 0;
+            $finalizar->save();
+
+            return back()->with('status', 'Intervención finalizada correctamente.');
+        }catch(\Exception $e){
+            return back()->with('statuserror', 'No se pudo finalizar la intervención.');
+        }
+
+
+    }
 
     public function crearIntervencion(Request $request){
         $listadeunidades = $this->obtenerUnidades();

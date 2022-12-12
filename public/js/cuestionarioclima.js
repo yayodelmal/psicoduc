@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    
+
     printClimaTable();
     printClimaDesarrollo();
 
@@ -292,12 +292,12 @@ function printClimaTable() {
     };
 
     var trData = '';
-    
+
     for (let i = 0; i < clima.data.length; i++) {
         var id_pregunta = clima.data[i].id;
         var inverso = clima.data[i].inverso;
 
-        trData += 
+        trData +=
             '<tr class="text-center">' +
             '<td><strong>' + clima.data[i].id + '</strong></td>' +
             '<td class="text-sm-start">' + clima.data[i].texto + '</td>'
@@ -335,7 +335,7 @@ function printClimaTable() {
             '</tr>';
     }
     $('#clima-tbody').append(trData);
-    
+
     //$("#tableclima").find("input").attr("disabled", "disabled");
     //$("#tableclima").find("input").attr("hidden", "hidden");
 }
@@ -363,8 +363,8 @@ function printClimaDesarrollo(){
     var trData2 = '';
 
     for (let i = 0; i < desarrollo.data.length; i++) {
-    
-        trData2 += 
+
+        trData2 +=
         //Pega de html de como quiero ver las preguntas de desarrollo
         '<div class="mb-3">'+
             '<label for="'+ desarrollo.data[i].id +'" class="form-label">'+ desarrollo.data[i].texto +'</label>'+
@@ -373,12 +373,12 @@ function printClimaDesarrollo(){
             '<div class="invalid-feedback"> Por favor, responsa la pregunta</div> '
             '</div>';
     }
-    
+
     $('#desarrollo-tbody').append(trData2);
 }
 
 function cambiarPuntoPorGuionBajo(id_pregunta){
-    
+
     if(id_pregunta.includes('.')){
         id_pregunta = id_pregunta.replace('.', '_')
         return id_pregunta;
@@ -519,10 +519,10 @@ function calcularPromedioS2(){
 }
 
 function calcularDesSS2(){
-    
+
     //Variables
     var media = calcularPromedioS2();
-    var n = 20; 
+    var n = 20;
     var sumatoria = 0;
     var varianza = 0;
     var desviacion = 0;
@@ -548,7 +548,7 @@ function calcularDesSS2(){
     respuestas.push($('input[name="p59_2"]').is(':checked') ? parseInt($('input[name="p59_2"]:checked').val()) : 0);
     respuestas.push($('input[name="p60_1"]').is(':checked') ? parseInt($('input[name="p60_1"]:checked').val()) : 0);
     respuestas.push($('input[name="p60_2"]').is(':checked') ? parseInt($('input[name="p60_2"]:checked').val()) : 0);
-    
+
     //Calcular la varianza
     for(var i = 0; i<n; i++ ){
         sumatoria = Math.pow(respuestas[i] - media, 2);
@@ -559,16 +559,16 @@ function calcularDesSS2(){
 
     //Calcular la desviación
     desviacion = Math.sqrt(varianza);
-    desviacion = desviacion.toFixed(9);  
+    desviacion = desviacion.toFixed(9);
 
     return desviacion;
 }
 
 
 function valideKey(evt){
-    
+
     var code = (evt.which) ? evt.which : evt.keyCode;
-    
+
     if(code==8) { // backspace.
       return true;
     } else if(code>=48 && code<=57) { // is a number.
@@ -598,10 +598,10 @@ function guardarRespuestasClima() {
         crossDomain: true,
         dataType: 'text',
         data: {
-   
+
             email: $("#email_user").val(),
             id_curso: $("#curso_user").val(),
-           
+
             //Preguntas de sexo y edad.
             genero: $("input[name='genero']:checked").val(),
             edad: $("#edad").val(),
@@ -657,7 +657,7 @@ function guardarRespuestasClima() {
             p48: $("input[name='p48']:checked").val(),
             p49: $("input[name='p49']:checked").val(),
             p50: $("input[name='p50']:checked").val(),
-            
+
             //Preguntas de liderazgo.
             p51_1: $("input[name='p51_1']:checked").val(),
             p51_2: $("input[name='p51_2']:checked").val(),
@@ -693,7 +693,7 @@ function guardarRespuestasClima() {
         },
 
         success: function(result){
-            console.log(result);
+            window.location.href = "http://localhost:8081/finalizar/cuestionario/clima/"+$("#curso_user").val();
          },
         error: function(jqXHR, textStatus, errorThrown){
             console.log(errorThrown)
@@ -1021,5 +1021,3 @@ function validarFormulario(){
     return true;
 
 }
-
-

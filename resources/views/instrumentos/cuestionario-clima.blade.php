@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-    
+
     <title>Cuestionario de Clima</title>
 
     <!-- Custom fonts for this template-->
@@ -21,7 +21,7 @@
     <!-- Custom styles for this template-->
     <link href="/css/sb-admin-2.min.css" rel="stylesheet">
 
-    
+
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
     <script src="{{ asset('js/cuestionarioclima.js') }}"></script>
 
@@ -40,9 +40,9 @@
                     <div class="card-body p-0">
                         <!-- Nested Row within Card Body -->
                         <div class="row">
-                            
+
                             <div class="col-lg-12">
-                                
+
                                 <div class="p-5">
 
                                     <div class="mb-1 small">
@@ -80,8 +80,8 @@
 
                                     {{-- <form class="user" method="POST" action="{{ route('guardarCuestionarioClima') }}" accept-charset="UTF-8" enctype="multipart/form-data"> --}}
                                     {{-- @csrf --}}
-        
-                                        
+
+
                                             <table class="table table-responsive">
                                                 <tr>
                                                     <th rowspan="3">Género</th>
@@ -101,10 +101,10 @@
                                                     <td>
                                                         <input class="form-check-input" type="radio" id="genero" name="genero" value="nc" style="margin-left: 1%;">
                                                     </td>
-                                                </tr>    
+                                                </tr>
                                             </table>
-                                        
-                            
+
+
                                             <table class="table table-responsive">
                                                 <tr>
                                                     <th>Edad</th>
@@ -113,8 +113,8 @@
                                                     </td>
                                                 </tr>
                                             </table>
-                                        
-                                           
+
+
                                         <table class="table table-striped" id="tableclima">
                                             <thead>
                                                 <tr class="text-center small">
@@ -141,7 +141,7 @@
                                                     <button type="submit" class="btn btn-success" onclick="guardarRespuestasClima()" id="btnEnviar">Finalizar cuestionario</button>
                                                 </div>
                                         </div>
-                                       
+
                                     {{-- </form> --}}
                                 </div>
                             </div>

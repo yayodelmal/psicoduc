@@ -73,7 +73,7 @@
                 </div>
             </li>
 
-        
+
             <!-- Divider -->
             <hr class="sidebar-divider">
 
@@ -83,11 +83,11 @@
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            
+
 
             <!-- Nav Item - Charts -->
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('vistaEstudio') }}">
+                <a class="nav-link" href="{{ route('listarEstudios') }}">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Estudio organizacional</span></a>
             </li>
@@ -144,12 +144,12 @@
                                 </li>
                             @endif
                         @else
-                        
+
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::user()->name }}</span>
-                            
+
                             </a>
                                 <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -167,20 +167,20 @@
                     </li>
                     @endguest
 
-                        
-                            
+
+
 
                     </ul>
-                    
+
 
                 </nav>
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-                    
+
                     <div class="card-body">
-                        @yield('content')                                
+                        @yield('content')
                     </div>
                     <!-- Page Heading -->
                     {{-- <div class="row">
@@ -206,7 +206,7 @@
                                     </div>
                                 </div>
                                 <!-- Card Body -->
-                                
+
                             </div>
                         </div>
                     </div> --}}

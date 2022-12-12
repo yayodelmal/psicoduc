@@ -38,11 +38,16 @@ Route::post('cuestionario/clima', [App\Http\Controllers\CuestionarioClima::class
 //Instrumento - Cuestionario de Clima
 Route::get('/cuestionario-de-clima', [App\Http\Controllers\CuestionarioClima::class, 'index'])->name('cuestionarioClima');
 Route::post('/guardar/cuestionario/clima', [App\Http\Controllers\CuestionarioClima::class, 'guardarCuestionarioClima'])->name('guardarCuestionarioClima');
-
+Route::get('/finalizar/cuestionario/clima/{id}', [App\Http\Controllers\CuestionarioClima::class, 'cuestionarioFinalizado'])->name('cuestionarioFinalizado');
 Route::get('/traerRespuestas/cuestionario/clima', [App\Http\Controllers\CuestionarioClima::class, 'traerRespuestas'])->name('traerRespuestas');
-Route::get('/estudio/clima', [App\Http\Controllers\CuestionarioClima::class, 'vistaEstudio'])->name('vistaEstudio');
+Route::get('/estudio/clima/intervencion/{id}', [App\Http\Controllers\CuestionarioClima::class, 'vistaEstudio'])->name('vistaEstudio');
 
 //Intervenciones
 Route::get('/intervenciones', [App\Http\Controllers\IntervencionController::class, 'index'])->name('listaIntervenciones');
 Route::get('/intervenciones/crear', [App\Http\Controllers\IntervencionController::class, 'crearIntervencion'])->name('crearIntervencion');
 Route::post('/intervenciones/registrar', [App\Http\Controllers\IntervencionController::class, 'registrarIntervencion'])->name('registrarIntervencion');
+Route::get('/intervenciones/finalizar/{id}', [App\Http\Controllers\IntervencionController::class, 'finalizarIntervencion'])->name('finalizarIntervencion');
+
+
+//Estudio
+Route::get('/estudio/clima/intervencion', [App\Http\Controllers\EstudioController::class, 'index'])->name('listarEstudios');

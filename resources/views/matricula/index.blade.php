@@ -29,11 +29,13 @@
                         <thead>
                           <tr>
                             {{-- <th scope="col">#</th> --}}
-                            <th scope="col">Acción</th>
+                            <th scope="col">Ingresar</th>
                             <th scope="col">Nombre completo</th>
                             <th scope="col">email</th>
                             <th scope="col">Unidad</th>
                             <th scope="col">Estado</th>
+                            <th scope="col">Acciones</th>
+
                           </tr>
                         </thead>
                         <tbody>
@@ -50,21 +52,26 @@
                                 @endif
 
                             </td>
-                            
+
                             <td>{{ $item->nombre }} {{ $item->apellidos }}</td>
                             <td>{{ $item->email }}</td>
                             <td>{{ $item->nombre_largo_curso }}</td>
 
                             <td>
                                 <span class="badge text-bg-{{ $item->matricula ? 'success' : 'warning'}}">{{ $item->matricula ? 'Ingresado' : 'Sin ingresar'}}</span>
-                                <span class="badge text-bg-{{ $item->registrado ? 'success' : 'warning' }}">{{ $item->registrado ? 'Unidad ingresada' : 'Unidad sin ingresar'}}</span>
+                                <span class="badge text-bg-{{ $item->registrado ? 'success' : 'warning'}}">{{ $item->registrado ? 'Unidad ingresada' : 'Unidad sin ingresar'}}</span>
+                            </td>
+
+                            <td>
+                                <a class="btn btn-warning" href="#" role="button" style="width: 40px; height: 40px;"><i class="fas fa-fw fa-edit"></i></a>
+                                <a class="btn btn-danger" href="#" role="button" style="width: 40px; height: 40px;"><i class="fas fa-fw fa-trash"></i></a>
                             </td>
                         </tr>
                     @endforeach
 
                         </tbody>
                     </table>
-                    {{ $listaDeMatricula-> links() }}
+                    {{ $listaDeMatricula->links() }}
                 </div>
             </div>
         </div>
